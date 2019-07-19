@@ -1,7 +1,10 @@
 <script>
   import { tick } from 'svelte'
   import PartBin from './PartBin.svelte'
+  import WorkArea from './WorkArea.svelte'
   import Transistor from './Transistor.svelte'
+  let canvasWidth = 1000
+  let binWidth = 125
 </script>
 
 <style>
@@ -16,9 +19,13 @@
 </style>
 
 <div id="app">
-  <h1>Logic Gate Game</h1>
-  <svg class="main-canvas" width="1000" height="600">
-    <PartBin />
+  <h1>Drag Drog</h1>
+  <svg class="main-canvas" width={canvasWidth} height="600">
+    <PartBin width={binWidth} />
+    <WorkArea
+      width={canvasWidth - binWidth}
+      x={binWidth + 1}
+    />
     <Transistor />
   </svg>
 </div>

@@ -1,7 +1,9 @@
 <script>
   import { onMount } from 'svelte'
   import mousePos from './mousePos'
-  export let width = 125
+  export let x = 0
+  export let y = 0
+  export let width = 875
   export let height = 600
   export let backgroundColor = '#ccc'
   let element
@@ -18,11 +20,11 @@
         $mousePos.y >= bounds.y &&
         $mousePos.y <= bounds.y + height
 
-      mousePos.setHovered('partsBin', withinBounds)
+      mousePos.setHovered('workAround', withinBounds)
 
-      backgroundColor = withinBounds ? '#ccc' : '#888'
+      backgroundColor = withinBounds ? '#fcc' : '#888'
     }
   }
 </script>
 
-<rect bind:this={element} x={0} y={0} {width} {height} fill={backgroundColor} stroke="#000" />
+<rect bind:this={element} {x} {y} {width} {height} fill={backgroundColor} stroke="#000" />
