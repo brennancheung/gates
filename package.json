@@ -12,6 +12,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "konva": "^3.4.1",
     "ramda": "^0.26.1",
     "sirv-cli": "^0.4.4"
   },
