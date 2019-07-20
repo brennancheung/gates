@@ -1,10 +1,59 @@
 <script>
+  import Konva from 'konva'
+  import PartsBin from './PartsBin'
+  import WorkArea from './WorkArea'
+  import Transistor from './Transistor'
   import { tick } from 'svelte'
-  import PartBin from './PartBin.svelte'
-  import WorkArea from './WorkArea.svelte'
-  import Transistor from './Transistor.svelte'
-  let canvasWidth = 1000
+
+  const width = 1000
+  const height = 600 
   let binWidth = 125
+
+  tick().then(() => {
+    const stage = new Konva.Stage({ container: 'stage', width, height })
+
+    const backgroundLayer = new Konva.Layer()
+    const partsLayer = new Konva.Layer()
+    const tempLayer = new Konva.Layer()
+
+    const partsBin = PartsBin({ width: binWidth, height })
+    const workArea = WorkArea({
+      x: binWidth + 1,
+      width: width - binWidth,
+      height,
+      fill: '#ccc',
+    })
+
+    const transistor = Transistor()
+
+    const handleDragEnd = e => {
+      const pos = stage.getPointerPosition()
+      const shape = backgroundLayer.getIntersection(pos)
+      if (!shape) { return }
+      const name = shape.name()
+      if (name === 'WorkArea') {
+        const newShape = Transistor({ x: 50, y: 500 })
+        newShape.on('dragend', handleDragEnd)
+        partsLayer.add(newShape)
+        stage.draw()
+      }
+      if (name === 'PartsBin') {
+        e.target.fire('reset-to-bin')
+      }
+    }
+
+    transistor.on('dragend', handleDragEnd)
+
+    stage.on('dragmove', e => {
+    })
+
+    backgroundLayer.add(partsBin)
+    backgroundLayer.add(workArea)
+    partsLayer.add(transistor)
+    stage.add(backgroundLayer)
+    stage.add(partsLayer)
+    stage.draw()
+  })
 </script>
 
 <style>
@@ -19,13 +68,7 @@
 </style>
 
 <div id="app">
-  <h1>Drag Drog</h1>
-  <svg class="main-canvas" width={canvasWidth} height="600">
-    <PartBin width={binWidth} />
-    <WorkArea
-      width={canvasWidth - binWidth}
-      x={binWidth + 1}
-    />
-    <Transistor />
-  </svg>
+  <h1>Drag Drop</h1>
+  <div id="stage" />
+  <div id="container" />
 </div>
